@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from hw15_app.models import Info
+from hw15_app.models import Info, Post
 
 
 # Register your models here.
@@ -9,3 +9,8 @@ class InfoAdmin(admin.ModelAdmin):
     list_display = ('id', 'created_at', 'first_name', 'last_name')
     ordering = ('id', 'created_at')
     readonly_fields = ('created_at',)
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('created_at', 'title', 'text')

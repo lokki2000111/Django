@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+
+    <div>
+        <h1>{{ user.username }}</h1>
+        {{user.first_name}}
+        {{user.last_name}}
+        {{user.email}}
+    </div>
+
+    <a href="{% url 'update' user.pk %}">+ Edit Profile</a>
+</body>
+</html>
