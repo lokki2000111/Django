@@ -8,9 +8,10 @@
 
     <div>
         <h1>{{ user.username }}</h1>
-        {{user.first_name}}
-        {{user.last_name}}
-        {{user.email}}
+        {% if user.profile.avatar %} <div><img src="{{ user.profile.avatar.url }}" alt="avatar" width="100px" height="100px"></div>{% endif %}
+        <div>{{user.first_name}}</div>
+        <div>{{user.last_name}}</div>
+        <div>{{user.email}}</div>
     </div>
 
     <a href="{% url 'update' user.pk %}">+ Edit Profile</a>

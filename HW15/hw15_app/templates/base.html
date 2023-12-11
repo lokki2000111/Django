@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Base Template</title>
+</head>
+<body>
+    <div>{% if user.profile.avatar %} <div><img src="{{ user.profile.avatar.url }}" alt="avatar" width="100px" height="100px"></div>{% endif %}</div>
+    <div>{{user.username}}</div>
+    {% if user.is_authenticated %}
+    <div><a href="{% url 'profile' %}">Profile</a></div>
+    <div><a href="{% url 'logout' %}">Logout</a></div>
+    {% else %}
+        <h2>Вы не авторизованы,авторизируйтесь или пройдите регистрацию</h2>
+        <div><a href="{% url 'reg_page' %}">Registration</a></div>
+        <div><a href="{% url 'login' %}">Login</a></div>
+        <div><a href="{% url 'main_page' %}">Home</a></div>
+    {% endif %}
+</body>
+</html>

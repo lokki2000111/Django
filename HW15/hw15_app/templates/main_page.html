@@ -8,6 +8,8 @@
     <title>HOME PAGE</title>
 </head>
 <body>
+    {% if user.is_authenticated %}<div>You signed in as {{ user.username }}</div> {% endif %}
+
     {% for inf in info %}
         <h3>{{inf.first_name}}</h3>
             {{inf.about_me}}

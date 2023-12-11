@@ -6,7 +6,7 @@
 </head>
 <body>
     <!-- create_post.html -->
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       {{ form.as_p }}
       <button type="submit">Создать</button>
