@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser, User
 from django.core.validators import RegexValidator
 from django.db import models
 
+from tags_app.models import Tag
+
 
 class Image(models.Model):
     image = models.ImageField(blank=True, null=True)
@@ -21,11 +23,13 @@ class Info(models.Model):
 
 
 class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=256, unique=False, blank=False, null=False)
     text = models.TextField(blank=False, null=False)
     is_public = models.BooleanField(default=True)
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE, null=True, default=None)
+    tag = models.ManyToManyField(Tag, null=False, blank=False, related_name='post_tags')
 
 
 class Profile(models.Model):

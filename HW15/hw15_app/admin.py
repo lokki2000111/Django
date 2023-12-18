@@ -17,6 +17,8 @@ class InfoAdmin(admin.ModelAdmin):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('created_at', 'title', 'text')
+    filter_vertical = ('tag',)  # Убедитесь, что здесь указано правильное имя поля ManyToMany
+
 
 
 class PostInline(admin.StackedInline):
@@ -24,6 +26,7 @@ class PostInline(admin.StackedInline):
     list_display = ['created_at',
                     'title',
                     'text',
+                    'tag',
                     'is_public',
                     'profile',
                     'post_image_preview',

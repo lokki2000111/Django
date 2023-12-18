@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth.views import LoginView
 from django import forms
+from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -12,6 +13,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import UpdateView
 
+from tags_app.models import Tag
 from .forms.registration import RegistrationForm
 from .models import Info, Post, Image, PostImage
 
@@ -91,26 +93,35 @@ class ImagePostForm(PostForm):
     image = MultipleFileField()
 
     class Meta(PostForm.Meta):
-        fields = PostForm.Meta.fields + ['image', ]
+        widgets = {
+            'tag': forms.CheckboxSelectMultiple(),
+        }
+        fields = PostForm.Meta.fields + ['image', 'tag']
 
 
 def create_post(request):
     if request.method == 'POST':
         form = ImagePostForm(request.POST, request.FILES)
         if form.is_valid():
-            data = form.data
+            # Создаем и сохраняем объект Post без назначения тегов
             post = Post(
-                title=data['title'],
-                text=data['text'],
-                is_public=True if data['is_public'] == 'on' else False,
-                profile=request.user.profile,
+                title=form.cleaned_data['title'],
+                text=form.cleaned_data['text'],
+                is_public=form.cleaned_data['is_public'],
+                profile=request.user.profile
             )
             post.save()
+
+            # Назначаем теги после сохранения объекта Post
+            post.tag.set(form.cleaned_data['tag'])
+
+            # Сохранение изображений
             files = request.FILES.getlist('image')
             for file in files:
                 img = Image.objects.create(image=file)
                 PostImage.objects.create(images=img, post=post)
-        return redirect('posts')  # замените на имя вашего представления списка постов
+
+            return redirect('posts')
 
     else:
         form = ImagePostForm()
@@ -121,6 +132,32 @@ def get_posts(request):
     posts = Post.objects.order_by('-id').all()
     return render(request, 'posts.html', context={'posts': posts})
 
+
+class Tags(View):
+
+    @staticmethod
+    def get(request):
+        count_tag = Tag.objects.annotate(cnt=Count('post_tags')).order_by('-cnt')
+
+        context = {
+            'title': 'Популярные теги',
+            'tag': count_tag,
+        }
+        return render(request, 'popular_tags.html', context)
+
+
+class GetTag(View):
+    @staticmethod
+    def get(request, tag):
+        existing_tag = Tag.objects.filter(tag_label=tag).first()
+        posts_by_tags = Post.objects.filter(tag=existing_tag).all()
+
+        context = {
+            'title': f"Посты по тегам: {existing_tag}",
+            'posts': posts_by_tags
+        }
+
+        return render(request, 'posts.html', context)
 
 class BaseTemplate(View):
     def get(self, request):

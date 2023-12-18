@@ -1,4 +1,6 @@
-<!doctype html>
+{% load menu_tags%}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,11 +10,16 @@
     <title>HOME PAGE</title>
 </head>
 <body>
-    {% if user.is_authenticated %}<div>You signed in as {{ user.username }}</div> {% endif %}
+<div id="main_menu">{% main_menu %}</div>
+<div id="user_menu">{% user_menu %}</div>
 
-    {% for inf in info %}
-        <h3>{{inf.first_name}}</h3>
-            {{inf.about_me}}
-    {% endfor %}
+{% if user.is_authenticated %}
+    <div>You signed in as {{ user.username }}</div>
+{% endif %}
+
+{% for inf in info %}
+    <h3>{{inf.first_name}}</h3>
+    {{inf.about_me}}
+{% endfor %}
 </body>
 </html>

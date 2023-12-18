@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% block content %}
+    <h2>Популярные теги:</h2>
+         <div>
+            {% for t in tag %}
+            <a href="{% url 'get_tag' t.tag_label %}">{{t.tag_label}}
+            <span>{{ t.cnt }}</span>
+            </a>
+            {% endfor %}
+         </div>
+    {% endblock %}
+</body>
+</html>
