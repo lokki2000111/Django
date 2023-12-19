@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'hw15_app',
     'menu_app',
     'tags_app',
+    'drf_spectacular',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +125,10 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 3,
+}

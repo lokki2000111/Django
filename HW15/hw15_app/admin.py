@@ -28,7 +28,6 @@ class PostInline(admin.StackedInline):
                     'text',
                     'tag',
                     'is_public',
-                    'profile',
                     'post_image_preview',
                     ]
 
@@ -50,10 +49,6 @@ class PostInline(admin.StackedInline):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'avatar_preview')
-
-    inlines = (
-        PostInline,
-    )
 
     @staticmethod
     def avatar_preview(obj):

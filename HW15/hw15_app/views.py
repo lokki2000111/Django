@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, ListView
 
 from tags_app.models import Tag
 from .forms.registration import RegistrationForm
@@ -104,11 +104,12 @@ def create_post(request):
         form = ImagePostForm(request.POST, request.FILES)
         if form.is_valid():
             # Создаем и сохраняем объект Post без назначения тегов
+
             post = Post(
+                user=request.user,
                 title=form.cleaned_data['title'],
                 text=form.cleaned_data['text'],
                 is_public=form.cleaned_data['is_public'],
-                profile=request.user.profile
             )
             post.save()
 
@@ -128,9 +129,25 @@ def create_post(request):
     return render(request, 'create_post.html', {'form': form})
 
 
-def get_posts(request):
-    posts = Post.objects.order_by('-id').all()
-    return render(request, 'posts.html', context={'posts': posts})
+class PostListView(ListView):
+    queryset = Post.objects.order_by('-created_at').all()
+    template_name = 'posts.html'
+    context_object_name = 'posts'
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return self.queryset.all()
+
+        return self.queryset.filter(is_public=True).all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['title'] = "Посты через PostListView"
+        return context
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class Tags(View):
@@ -158,6 +175,7 @@ class GetTag(View):
         }
 
         return render(request, 'posts.html', context)
+
 
 class BaseTemplate(View):
     def get(self, request):

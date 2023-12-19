@@ -28,8 +28,7 @@ class Post(models.Model):
     title = models.CharField(max_length=256, unique=False, blank=False, null=False)
     text = models.TextField(blank=False, null=False)
     is_public = models.BooleanField(default=True)
-    profile = models.ForeignKey('Profile', on_delete=models.CASCADE, null=True, default=None)
-    tag = models.ManyToManyField(Tag, null=False, blank=False, related_name='post_tags')
+    tag = models.ManyToManyField(Tag, null=True, blank=True, related_name='post_tags')
 
 
 class Profile(models.Model):
