@@ -6,7 +6,7 @@ from tags_app.api.serializers.tags import TagSerializer
 from tags_app.models import Tag
 
 
-class TagsView(APIView):
+class TagsViewSet(APIView):
     serializer_class = TagSerializer
 
     @staticmethod

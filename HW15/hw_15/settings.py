@@ -35,11 +35,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_spectacular',
+    'rest_framework',
     'hw15_app',
     'menu_app',
     'tags_app',
-    'drf_spectacular',
-    'rest_framework',
+    'media_app',
+    'comment_app',
+    'like_app',
 ]
 
 MIDDLEWARE = [
@@ -131,4 +134,8 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 3,
+}
+
+SPECTACULAR_SETTINGS = {
+    'COMPONENT_SPLIT_REQUEST': True
 }

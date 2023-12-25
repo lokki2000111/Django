@@ -15,7 +15,7 @@ from django.views.generic import UpdateView, ListView
 
 from tags_app.models import Tag
 from .forms.registration import RegistrationForm
-from .models import Info, Post, Image, PostImage
+from .models import Info, Post
 
 # Create your views here
 info = Info.objects.all()

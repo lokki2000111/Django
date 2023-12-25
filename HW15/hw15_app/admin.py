@@ -20,7 +20,6 @@ class PostAdmin(admin.ModelAdmin):
     filter_vertical = ('tag',)  # Убедитесь, что здесь указано правильное имя поля ManyToMany
 
 
-
 class PostInline(admin.StackedInline):
     model = Post
     list_display = ['created_at',

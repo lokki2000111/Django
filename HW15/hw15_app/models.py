@@ -2,16 +2,8 @@ from django.contrib.auth.models import AbstractUser, User
 from django.core.validators import RegexValidator
 from django.db import models
 
+from media_app.models import Media
 from tags_app.models import Tag
-
-
-class Image(models.Model):
-    image = models.ImageField(blank=True, null=True)
-
-
-class PostImage(models.Model):
-    images = models.ForeignKey(Image, on_delete=models.CASCADE, related_name='images')
-    post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name='post_images')
 
 
 class Info(models.Model):
@@ -27,8 +19,9 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=256, unique=False, blank=False, null=False)
     text = models.TextField(blank=False, null=False)
+    file = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
     is_public = models.BooleanField(default=True)
-    tag = models.ManyToManyField(Tag, null=True, blank=True, related_name='post_tags')
+    tag = models.ManyToManyField(Tag, related_name='post_tags')
 
 
 class Profile(models.Model):
